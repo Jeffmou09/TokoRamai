@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\StokProdukController;
+
+Route::get('/inputstok', [StokProdukController::class, 'index'])->name('inputstok');
+Route::post('/inputstok/store', [StokProdukController::class, 'store'])->name('inputstok.store');
 
 Route::get('/daftarproduk', [ProdukController::class, 'index'])->name('daftarproduk');
 Route::post('/daftarproduk/store', [ProdukController::class, 'store'])->name('daftarproduk.store');
@@ -21,14 +25,6 @@ Route::delete('/customer/{id}', [CustomerController::class, 'destroy'])->name('c
 Route::get('/', function () {
     return view('home');
 })->name('home');
-
-Route::get('/inputstok', function () {
-    return view('inputstok');
-})->name('inputstok');
-
-Route::get('/stok', function () {
-    return view('stok');
-})->name('stok');
 
 Route::get('/transaksi', function () {
     return view('transaksi');

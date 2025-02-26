@@ -46,11 +46,6 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('stok') }}" class="nav-link text-white {{ request()->routeIs('stok') ? 'active' : '' }}">
-                        <i class="bi bi-boxes me-2"></i> Stok
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="#" class="nav-link text-white d-flex justify-content-between align-items-center" id="transaksiToggle">
                         <div class="d-flex align-items-center">
                             <i class="bi bi-credit-card me-2"></i> Transaksi
