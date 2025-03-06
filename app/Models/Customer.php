@@ -15,4 +15,9 @@ class Customer extends Model
     protected $keyType = 'string';
 
     protected $fillable = ['id', 'nama_customer', 'alamat', 'no_hp'];
+
+    public function transaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'id_customer', 'id');
+    }
 }
