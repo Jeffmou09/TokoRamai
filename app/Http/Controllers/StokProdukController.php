@@ -77,4 +77,17 @@ class StokProdukController extends Controller
 
         return redirect()->back()->with('success', 'Stok berhasil diperbarui!');
     }
+
+    public function detail($id)
+    {
+        // Get stock data with product relation
+        $stok = StokProduk::with('produk')->findOrFail($id);
+        
+        // Get stock opname data related to this stock
+        $stokOpname = StokOpname::where('id_stok', $id)
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+        
+        return view('produk.stokdetail', compact('stok', 'stokOpname'));
+    }
 }

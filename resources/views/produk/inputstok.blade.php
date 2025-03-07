@@ -67,6 +67,7 @@
                         <th>Satuan (Sak / Dus)</th>
                         <th>Isi</th>
                         <th>Jenis Isi (Kg / Pcs)</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,6 +78,11 @@
                             <td>{{ $stok->produk->satuan }}</td>
                             <td>{{ $stok->stok_satuan_isi }}</td>
                             <td>{{ $stok->produk->jenis_isi }}</td>
+                            <td class="text-center">
+                                <a href="{{ route('produk.stokdetail', $stok->id) }}" class="btn btn-sm btn-info" title="Lihat Detail Stok">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

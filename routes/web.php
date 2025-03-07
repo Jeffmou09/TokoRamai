@@ -8,6 +8,7 @@ use App\Http\Controllers\TransaksiController;
 
 Route::get('/inputstok', [StokProdukController::class, 'index'])->name('inputstok');
 Route::post('/inputstok/store', [StokProdukController::class, 'store'])->name('inputstok.store');
+Route::get('/stok/detail/{id}', [StokProdukController::class, 'detail'])->name('produk.stokdetail');
 
 Route::get('/daftarproduk', [ProdukController::class, 'index'])->name('daftarproduk');
 Route::post('/daftarproduk/store', [ProdukController::class, 'store'])->name('daftarproduk.store');
