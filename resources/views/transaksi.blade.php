@@ -2,121 +2,159 @@
 
 @section('content')
 <div class="container">
-    <div class="row mb-3">
-        <!-- Card Tagihan -->
-        <div class="col-md-8">
-            <div class="card p-3 shadow-sm h-100 d-flex justify-content-center">
-                <h1 class="font-weight-bold m-0">Tagihan: Rp <span id="total_tagihan">0</span></h1>
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="successModalLabel">Transaksi Berhasil!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    <h4 class="mt-3">Transaksi telah berhasil disimpan</h4>
+                    <p>Terima kasih atas pembelian Anda</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <a href="#" class="btn btn-primary" id="cetakNota">
+                        <i class="bi bi-printer"></i> Cetak Nota
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    <form id="transaksiForm" action="{{ route('transaksi.store') }}" method="POST">
+        @csrf
+        <div class="row mb-3">
+            <!-- Card Tagihan -->
+            <div class="col-md-8">
+                <div class="card p-3 shadow-sm h-100 d-flex justify-content-center">
+                    <h1 class="font-weight-bold m-0">Tagihan: Rp <span id="total_tagihan">0</span></h1>
+                </div>
+            </div>
+
+            <!-- Card Informasi Nota -->
+            <div class="col-md-4">
+                <div class="card p-3 shadow-sm h-100">
+                    <label>Tanggal:</label>
+                    <input type="date" name="tanggal_transaksi" class="form-control" value="{{ date('Y-m-d') }}" readonly>
+
+                    <label>Customer:</label>
+                    <input type="hidden" name="customer_id" id="customer_id">
+                    <input type="text" id="nama_customer" class="form-control" list="customerList" placeholder="Cari customer...">
+                    <datalist id="customerList">
+                        @foreach($customerList as $customer)
+                            <option data-id="{{ $customer->id }}" value="{{ $customer->nama_customer }}"></option>
+                        @endforeach
+                    </datalist>
+                </div>
             </div>
         </div>
 
-        <!-- Card Informasi Nota -->
-        <div class="col-md-4">
-            <div class="card p-3 shadow-sm h-100">
-                <label>Tanggal:</label>
-                <input type="date" class="form-control" value="{{ date('Y-m-d') }}" readonly>
-
-                <label>Customer:</label>
-                <input type="hidden" name="customer_id" id="customer_id">
-                <input type="text" id="nama_customer" class="form-control" list="customerList" placeholder="Cari customer...">
-                <datalist id="customerList">
-                    @foreach($customerList as $customer)
-                        <option data-id="{{ $customer->id }}" value="{{ $customer->nama_customer }}"></option>
+        <!-- Form Input Produk -->
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label>Nama Produk</label>
+                <input type="hidden" name="produk_id" id="produk_id">
+                <input type="text" id="nama_produk" class="form-control" list="produkList" placeholder="Cari produk...">
+                <datalist id="produkList">
+                    @foreach($produkList as $produk)
+                        <option data-id="{{ $produk->id }}" value="{{ $produk->nama_produk }}"></option>
                     @endforeach
                 </datalist>
             </div>
-        </div>
-    </div>
 
-    <!-- Form Input Produk -->
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <label>Nama Produk</label>
-            <input type="hidden" name="produk_id" id="produk_id">
-            <input type="text" id="nama_produk" class="form-control" list="produkList" placeholder="Cari produk...">
-            <datalist id="produkList">
-                @foreach($produkList as $produk)
-                    <option data-id="{{ $produk->id }}" value="{{ $produk->nama_produk }}"></option>
-                @endforeach
-            </datalist>
-        </div>
-
-        <div class="col-md-3">
-            <label>Harga Per Satuan</label>
-            <input type="text" class="form-control" id="harga_satuan" readonly>
-        </div>
-
-        <div class="col-md-2">
-            <label>Jumlah</label>
-            <input type="number" class="form-control" id="jumlah" value="1" min="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-        </div>
-
-        <div class="col-md-2">
-            <label>Jenis Satuan</label>
-            <select class="form-control" id="jenis_satuan">
-                <!-- Opsi akan diisi dengan JavaScript -->
-            </select>
-        </div>
-
-        <div class="col-md-2">
-            <label>Harga Akhir</label>
-            <input type="text" class="form-control" id="harga_akhir" readonly>
-        </div>
-    </div>
-
-    <button class="btn btn-primary" id="simpan_item">Simpan Item</button>
-
-    <!-- Tabel Barang Dibeli -->
-    <div class="card mt-3 p-3">
-        <h5>Barang Dibeli</h5>
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Nama Barang</th>
-                    <th>Harga Satuan</th>
-                    <th>Jumlah</th>
-                    <th>Jenis Satuan</th>
-                    <th>Harga Jual</th>
-                    <th class="text-center">Opsi</th>
-                </tr>
-            </thead>
-            <tbody id="tabel_barang">
-                <!-- Data akan diisi dengan JavaScript -->
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Card Subtotal, Diskon, dan Total Akhir -->
-    <div class="d-flex justify-content-end">
-        <div class="card mt-3 p-3 ms-auto" style="max-width: 400px;">
-            <h5>Ringkasan Pembayaran</h5>
-            
-            <!-- Subtotal -->
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <label class="me-2 mb-0">Subtotal:</label>
-                <h4 class="mb-0">Rp <span id="subtotal">0</span></h4>
+            <div class="col-md-3">
+                <label>Harga Per Satuan</label>
+                <input type="text" class="form-control" id="harga_satuan" readonly>
             </div>
 
-            <!-- Diskon -->
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <label class="me-2 mb-0">Diskon:</label>
-                <input type="number" class="form-control w-100" id="diskon" placeholder="Masukkan diskon" value="" min="0" oninput="validity.valid||(value='');">
+            <div class="col-md-2">
+                <label>Jumlah</label>
+                <input type="number" class="form-control" id="jumlah" value="1" min="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
 
-            <!-- Total Akhir -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <label class="me-2 mb-0">Total Akhir:</label>
-                <h4 class="mb-0">Rp <span id="total_akhir">0</span></h4>
+            <div class="col-md-2">
+                <label>Jenis Satuan</label>
+                <select class="form-control" id="jenis_satuan">
+                    <!-- Opsi akan diisi dengan JavaScript -->
+                </select>
             </div>
 
-            <!-- Tombol Simpan & Batal -->
-            <button class="btn btn-success btn-sm">Simpan</button>
+            <div class="col-md-2">
+                <label>Harga Akhir</label>
+                <input type="text" class="form-control" id="harga_akhir" readonly>
+            </div>
         </div>
-    </div>
+
+        <button type="button" class="btn btn-primary" id="simpan_item">Simpan Item</button>
+
+        <!-- Tabel Barang Dibeli -->
+        <div class="card mt-3 p-3">
+            <h5>Barang Dibeli</h5>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nama Barang</th>
+                        <th>Harga Satuan</th>
+                        <th>Jumlah</th>
+                        <th>Jenis Satuan</th>
+                        <th>Harga Jual</th>
+                        <th class="text-center">Opsi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabel_barang">
+                    <!-- Data akan diisi dengan JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Hidden input to store items data -->
+        <input type="hidden" name="items_json" id="items_json" value="">
+        <input type="hidden" name="jumlah_produk_terjual" id="jumlah_produk_terjual" value="0">
+        <input type="hidden" name="total_transaksi" id="total_transaksi" value="0">
+
+        <!-- Card Subtotal, Diskon, dan Total Akhir -->
+        <div class="d-flex justify-content-end">
+            <div class="card mt-3 p-3 ms-auto" style="max-width: 400px;">
+                <h5>Ringkasan Pembayaran</h5>
+                
+                <!-- Subtotal -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="me-2 mb-0">Subtotal:</label>
+                    <h4 class="mb-0">Rp <span id="subtotal">0</span></h4>
+                </div>
+
+                <!-- Diskon -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="me-2 mb-0">Diskon:</label>
+                    <input type="number" name="diskon" class="form-control w-100" id="diskon" placeholder="Masukkan diskon" value="0" min="0" oninput="validity.valid||(value='');">
+                </div>
+
+                <!-- Total Akhir -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <label class="me-2 mb-0">Total Akhir:</label>
+                    <h4 class="mb-0">Rp <span id="total_akhir">0</span></h4>
+                </div>
+
+                <!-- Tombol Simpan & Batal -->
+                <button type="submit" class="btn btn-success btn-sm" id="simpan_transaksi">Simpan</button>
+            </div>
+        </div>
+    </form>
 </div>
 
 <script>
-   document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const produkInput = document.getElementById("nama_produk");
     const hargaSatuanInput = document.getElementById("harga_satuan");
     const jumlahInput = document.getElementById("jumlah");
@@ -126,10 +164,16 @@
     const simpanItemBtn = document.getElementById("simpan_item");
     const tabelBarang = document.getElementById("tabel_barang");
     const totalTagihan = document.getElementById("total_tagihan");
+    const customerInput = document.getElementById("nama_customer");
+    const customerIdInput = document.getElementById("customer_id");
+    const itemsJsonInput = document.getElementById("items_json");
+    const jumlahProdukTerjualInput = document.getElementById("jumlah_produk_terjual");
+    const totalTransaksiInput = document.getElementById("total_transaksi");
 
     const subtotalElement = document.getElementById("subtotal");
     const diskonInput = document.getElementById("diskon");
     const totalAkhirElement = document.getElementById("total_akhir");
+    const transaksiForm = document.getElementById("transaksiForm");
 
     let produkData = {
         @foreach($produkList as $produk)
@@ -143,6 +187,21 @@
             },
         @endforeach
     };
+
+    // Array untuk menyimpan semua item yang ditambahkan
+    let items = [];
+
+    // Menangani input customer
+    customerInput.addEventListener("input", function() {
+        const selectedOption = [...document.querySelectorAll("#customerList option")]
+            .find(option => option.value === this.value);
+        
+        if (selectedOption) {
+            customerIdInput.value = selectedOption.getAttribute("data-id");
+        } else {
+            customerIdInput.value = "";
+        }
+    });
 
     produkInput.addEventListener("input", function () {
         const selectedProduk = produkData[this.value];
@@ -191,16 +250,34 @@
 
     simpanItemBtn.addEventListener("click", function () {
         const namaProduk = produkInput.value;
+        const produkId = produkIdInput.value;
         const hargaSatuan = hargaSatuanInput.value;
         const jumlah = jumlahInput.value;
         const jenisSatuan = jenisSatuanSelect.value;
         const hargaJual = hargaAkhirInput.value;
 
-        if (!namaProduk || !hargaSatuan || !jumlah || !hargaJual) return;
+        if (!namaProduk || !hargaSatuan || !jumlah || !hargaJual || !produkId) {
+            alert("Semua field produk harus diisi!");
+            return;
+        }
+
+        // Simpan item ke array items
+        items.push({
+            produk_id: produkId,
+            nama_produk: namaProduk,
+            harga_satuan: parseFloat(hargaSatuan),
+            jumlah: parseInt(jumlah),
+            jenis_satuan: jenisSatuan,
+            sub_total: parseFloat(hargaJual)
+        });
+
+        // Update hidden input dengan data items
+        itemsJsonInput.value = JSON.stringify(items);
 
         // Buat baris baru
         let row = tabelBarang.insertRow();
         row.setAttribute("data-harga", hargaJual); // Simpan harga sebagai atribut data-harga
+        row.setAttribute("data-index", items.length - 1); // Simpan index untuk hapus
 
         row.innerHTML = `
             <td>${namaProduk}</td>
@@ -209,11 +286,18 @@
             <td>${jenisSatuan}</td>
             <td>Rp ${parseFloat(hargaJual).toLocaleString()}</td>
             <td class="text-center">
-                <button class="btn btn-danger btn-sm" onclick="hapusItem(this)">
+                <button type="button" class="btn btn-danger btn-sm delete-item" data-index="${items.length - 1}">
                     <i class="bi bi-trash"></i>
                 </button>
             </td>
         `;
+
+        // Reset form
+        produkInput.value = "";
+        hargaSatuanInput.value = "";
+        jumlahInput.value = "1";
+        hargaAkhirInput.value = "";
+        jenisSatuanSelect.innerHTML = "";
 
         // Hitung ulang total tagihan dan subtotal
         updateTotalTagihan();
@@ -221,15 +305,16 @@
 
     function updateTotalTagihan() {
         let total = 0;
-        let rows = document.querySelectorAll("#tabel_barang tr");
+        let totalItems = 0;
 
-        rows.forEach(row => {
-            let harga = parseFloat(row.getAttribute("data-harga") || 0);
-            total += harga;
+        items.forEach(item => {
+            total += item.sub_total;
+            totalItems += item.jumlah;
         });
 
         subtotalElement.textContent = total.toLocaleString();
         totalTagihan.textContent = total.toLocaleString();
+        jumlahProdukTerjualInput.value = totalItems;
 
         // Perbarui total akhir dengan diskon
         updateTotalAkhir();
@@ -244,22 +329,76 @@
 
         totalAkhirElement.textContent = totalAkhir.toLocaleString();
         totalTagihan.textContent = totalAkhir.toLocaleString(); // Perbarui total tagihan juga
+        totalTransaksiInput.value = Math.round(totalAkhir); // Update hidden field untuk total transaksi (dibulatkan)
     }
 
     diskonInput.addEventListener("input", updateTotalAkhir);
 
-    function hapusItem(button) {
-        let row = button.closest("tr");
-        row.remove();
-
-        updateTotalTagihan();
-    }
-
+    // Event delegation untuk tombol hapus
     document.addEventListener("click", function (event) {
-        if (event.target.closest(".btn-danger")) {
-            hapusItem(event.target.closest(".btn-danger"));
+        if (event.target.closest(".delete-item")) {
+            const btn = event.target.closest(".delete-item");
+            const index = parseInt(btn.getAttribute("data-index"));
+            
+            // Hapus item dari array
+            items.splice(index, 1);
+            
+            // Update hidden input
+            itemsJsonInput.value = JSON.stringify(items);
+            
+            // Hapus baris dari tabel
+            btn.closest("tr").remove();
+            
+            // Update semua indeks pada baris yang tersisa
+            const rows = tabelBarang.querySelectorAll("tr");
+            rows.forEach((row, i) => {
+                row.setAttribute("data-index", i);
+                row.querySelector(".delete-item").setAttribute("data-index", i);
+            });
+            
+            // Update total
+            updateTotalTagihan();
         }
     });
+
+    // Form submission validation
+    transaksiForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        
+        if (items.length === 0) {
+            alert("Silakan tambahkan produk terlebih dahulu!");
+            return;
+        }
+        
+        // Jika customer kosong, buat null
+        if (!customerIdInput.value) {
+            customerIdInput.value = "";
+        }
+        
+        this.submit();
+    });
+});
+
+// Check for success session and show modal
+@if(session('success'))
+    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+    successModal.show();
+    
+    // Store transaction ID in localStorage for printing
+    @if(session()->has('transaction_id'))
+        localStorage.setItem('lastTransactionId', '{{ session('transaction_id') }}');
+    @endif
+@endif
+
+// Handle print button click
+document.getElementById('cetakNota').addEventListener('click', function(e) {
+    e.preventDefault();
+    @if(session()->has('last_transaction_id'))
+        // Use the ID directly from session
+        window.open('/transaksi/cetak/{{ session("last_transaction_id") }}', '_blank');
+    @else
+        alert('Data transaksi tidak ditemukan!');
+    @endif
 });
 </script>
 @endsection

@@ -24,7 +24,8 @@ Route::post('/customer/{id}/update', [CustomerController::class, 'update'])->nam
 Route::delete('/customer/{id}', [CustomerController::class, 'destroy'])->name('customer.destroy');
 
 Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi');
-Route::post('/transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
+Route::post('/transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
+Route::get('/transaksi/cetak/{id}', [TransaksiController::class, 'cetakNota'])->name('transaksi.cetak');
 
 Route::get('/', function () {
     return view('home');
