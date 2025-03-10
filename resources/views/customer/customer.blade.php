@@ -33,7 +33,7 @@
                             <td>{{ $customer->alamat }}</td>
                             <td>{{ $customer->no_hp }}</td>
                             <td class="text-center">
-                            <a href="{{ route('customer.editcustomer', $customer->id) }}" class="btn btn-success btn-sm">
+                            <a href="{{ route('customer.editcustomer', $customer->id) }}" class="btn btn-warning btn-sm">
                                 <i class="bi bi-pencil"></i>
                             </a>
                             <form action="{{ route('customer.destroy', $customer->id) }}" method="POST" class="d-inline">

@@ -58,7 +58,7 @@
                                 <a href="{{ route('transaksi') }}" class="nav-link text-white {{ request()->routeIs('transaksi') ? 'active' : '' }}">Buat Transaksi</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('historytransaksi') }}" class="nav-link text-white {{ request()->routeIs('historytransaksi') ? 'active' : '' }}">History Transaksi</a>
+                                <a href="{{ route('transaksi.history') }}" class="nav-link text-white {{ request()->routeIs('transaksi.history') ? 'active' : '' }}">History Transaksi</a>
                             </li>
                         </ul>
                     </div>

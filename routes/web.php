@@ -27,11 +27,10 @@ Route::delete('/customer/{id}', [CustomerController::class, 'destroy'])->name('c
 Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi');
 Route::post('/transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
 Route::get('/transaksi/cetak/{id}', [TransaksiController::class, 'cetakNota'])->name('transaksi.cetak');
+Route::get('/transaksi/history', [TransaksiController::class, 'history'])->name('transaksi.history');
+Route::get('/transaksi/detail/{id}', [TransaksiController::class, 'detail'])->name('transaksi.detail');
+Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
 
 Route::get('/', function () {
     return view('home');
 })->name('home');
-
-Route::get('/historytransaksi', function () {
-    return view('historytransaksi');
-})->name('historytransaksi');

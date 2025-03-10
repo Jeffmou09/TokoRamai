@@ -20,7 +20,7 @@ class TransaksiController extends Controller
         $customerList = Customer::all(); 
         $produkList = Produk::all(); 
 
-        return view('transaksi', compact('customerList', 'produkList'));
+        return view('transaksi.transaksi', compact('customerList', 'produkList'));
     }
 
     public function store(Request $request)
@@ -192,7 +192,71 @@ class TransaksiController extends Controller
             return abort(404);
         }
         
-        $pdf = PDF::loadView('cetak-nota', compact('transaksi'));
+        $pdf = PDF::loadView('transaksi.cetak-nota', compact('transaksi'));
         return $pdf->stream('Nota-'.$id.'.pdf');
+    }
+
+    public function history(Request $request)
+    {
+        $periode = $request->input('periode', 'today'); // Default: hari ini
+        
+        $query = Transaksi::with(['detailTransaksi.produk', 'customer']);
+        
+        // Filter berdasarkan periode yang dipilih
+        switch ($periode) {
+            case 'today':
+                $query->whereDate('tanggal_transaksi', now()->toDateString());
+                break;
+            case 'week':
+                $query->where('tanggal_transaksi', '>=', now()->subDays(7)->startOfDay());
+                break;
+            case 'month':
+                $query->where('tanggal_transaksi', '>=', now()->subDays(30)->startOfDay());
+                break;
+            case 'all':
+                // Tidak perlu filter, tampilkan semua data
+                break;
+        }
+        
+        // Urutkan berdasarkan tanggal transaksi terbaru
+        $transaksi = $query->orderBy('tanggal_transaksi', 'desc')
+                   ->orderBy('created_at', 'desc')
+                   ->get();
+    
+        return view('transaksi.history', compact('transaksi'));
+    }
+
+    public function detail($id)
+    {
+        $transaksi = Transaksi::with(['detailTransaksi.produk', 'customer'])->find($id);
+        if (!$transaksi) {
+            return abort(404);
+        }
+        return view('transaksi.detail', compact('transaksi'));
+    }
+
+    public function destroy($id)
+    {
+        // Begin transaction
+        DB::beginTransaction();
+        try {
+            $transaksi = Transaksi::with('detailTransaksi')->findOrFail($id);
+            
+            // Hapus semua detail transaksi terlebih dahulu
+            foreach ($transaksi->detailTransaksi as $detail) {
+                $detail->delete();
+            }
+            
+            // Setelah semua detail dihapus, hapus transaksi utama
+            $transaksi->delete();
+            
+            DB::commit();
+            return redirect()->route('transaksi.history')
+                ->with('success', 'Transaksi berhasil dihapus!');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus transaksi: ' . $e->getMessage());
+        }
     }
 }

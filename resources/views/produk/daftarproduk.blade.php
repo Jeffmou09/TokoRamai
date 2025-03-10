@@ -43,7 +43,7 @@
                             <td>Rp {{ number_format($produk->harga_jual_per_satuan, 2, ',', '.') }}</td>
                             <td>Rp {{ number_format($produk->harga_jual_per_isi, 2, ',', '.') }}</td>
                             <td class="text-center">
-                                <a href="{{ route('daftarproduk.editproduk', $produk->id) }}" class="btn btn-success btn-sm">
+                                <a href="{{ route('daftarproduk.editproduk', $produk->id) }}" class="btn btn-warning btn-sm">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <form action="{{ route('daftarproduk.destroy', $produk->id) }}" method="POST" class="d-inline">
