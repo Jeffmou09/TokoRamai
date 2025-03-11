@@ -15,7 +15,6 @@
     </style>
 </head>
 <body>
-
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="text-white p-3" style="width: 250px; min-height: 100vh; background-color: rgba(55, 62, 83, 1);">
@@ -23,7 +22,7 @@
             <hr>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="{{ route('home') }}" class="nav-link text-white {{ request()->routeIs('home') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard') }}" class="nav-link text-white {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <i class="bi bi-house-door me-2"></i> Dashboard
                     </a>
                 </li>
@@ -116,6 +115,6 @@
             localStorage.setItem('transaksiOpen', !transaksiSubmenu.classList.contains('collapse'));
         });
     </script>
-
+  @yield('scripts')
 </body>
 </html>

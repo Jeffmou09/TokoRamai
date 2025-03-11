@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\StokProdukController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/inputstok', [StokProdukController::class, 'index'])->name('inputstok');
 Route::post('/inputstok/store', [StokProdukController::class, 'store'])->name('inputstok.store');
@@ -31,6 +32,4 @@ Route::get('/transaksi/history', [TransaksiController::class, 'history'])->name(
 Route::get('/transaksi/detail/{id}', [TransaksiController::class, 'detail'])->name('transaksi.detail');
 Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
