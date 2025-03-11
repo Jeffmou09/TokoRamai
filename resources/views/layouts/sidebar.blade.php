@@ -67,6 +67,11 @@
                         <i class="bi bi-person me-2"></i> Customer
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('laporan') }}" class="nav-link text-white {{ request()->routeIs('laporan') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-text me-2"></i> Laporan
+                    </a>
+                </li>
             </ul>
         </div>
 

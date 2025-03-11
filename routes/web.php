@@ -33,3 +33,7 @@ Route::get('/transaksi/detail/{id}', [TransaksiController::class, 'detail'])->na
 Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
 
 Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+Route::get('/laporan', function () {
+    return view('laporan.laporan'); 
+})->name('laporan');

@@ -24,7 +24,7 @@
                         <p><strong>Tanggal Transaksi:</strong> {{ date('d-m-Y', strtotime($transaksi->tanggal_transaksi)) }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Diskon:</strong> {{ $transaksi->diskon }}%</p>
+                        <p><strong>Diskon:</strong> Rp {{ number_format($transaksi->diskon, 2, ',', '.') }}</p>
                         <p><strong>Jumlah Produk Terjual:</strong> {{ $transaksi->jumlah_produk_terjual }}</p>
                         <p><strong>Total Transaksi:</strong> Rp {{ number_format($transaksi->total_transaksi, 2, ',', '.') }}</p>
                     </div>
@@ -62,8 +62,8 @@
                     </tr>
                     @if($transaksi->diskon > 0)
                     <tr>
-                        <td colspan="4" class="text-end"><strong>Diskon ({{ $transaksi->diskon }}%)</strong></td>
-                        <td>Rp {{ number_format($transaksi->detailTransaksi->sum('sub_total') * $transaksi->diskon / 100, 2, ',', '.') }}</td>
+                        <td colspan="4" class="text-end"><strong>Diskon</strong></td>
+                        <td>Rp {{ number_format($transaksi->diskon, 2, ',', '.') }}</td>
                     </tr>
                     @endif
                     <tr>

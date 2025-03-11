@@ -40,7 +40,7 @@
                         <td>{{ date('d-m-Y', strtotime($trx->tanggal_transaksi)) }}</td>
                         <td>{{ $trx->customer ? $trx->customer->nama_customer : 'Umum' }}</td>
                         <td>{{ $trx->jumlah_produk_terjual }}</td>
-                        <td>{{ $trx->diskon }}%</td>
+                        <td>Rp  {{ number_format($trx->diskon, 2, ',', '.') }}</td>
                         <td>Rp {{ number_format($trx->total_transaksi, 2, ',', '.') }}</td>
                         <td class="text-center">
                             <!-- Tombol lihat detail -->
