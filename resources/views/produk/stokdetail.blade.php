@@ -18,7 +18,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <table class="table table-borderless text-light">
+                        <table clv ass="table table-borderless text-light">
                             <tr>
                                 <td>Nama Produk</td>
                                 <td>: {{ $stok->produk->nama_produk }}</td>

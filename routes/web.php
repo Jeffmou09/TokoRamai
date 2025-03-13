@@ -6,6 +6,7 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\StokProdukController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LaporanTransaksiController;
 
 Route::get('/inputstok', [StokProdukController::class, 'index'])->name('inputstok');
 Route::post('/inputstok/store', [StokProdukController::class, 'store'])->name('inputstok.store');
@@ -33,6 +34,11 @@ Route::get('/transaksi/detail/{id}', [TransaksiController::class, 'detail'])->na
 Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
 
 Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+Route::get('/laporan/transaksi/pdf', [LaporanTransaksiController::class, 'generateTransaksiPDF'])->name('laporan.transaksi.pdf');
+Route::get('/laporan/produk/pdf', [LaporanTransaksiController::class, 'generateProdukPDF'])->name('laporan.produk.pdf');
+Route::get('/laporan/transaksi', [LaporanTransaksiController::class, 'transaksi'])->name('laporan.transaksi');
+Route::get('/laporan/produk', [LaporanTransaksiController::class, 'produk'])->name('laporan.produk');
 
 Route::get('/laporan', function () {
     return view('laporan.laporan'); 
