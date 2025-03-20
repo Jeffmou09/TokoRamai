@@ -13,7 +13,6 @@ class LaporanTransaksiController extends Controller
 {
     public function generateTransaksiPDF(Request $request)
     {
-        // Validasi request
         $request->validate([
             'tanggal_awal' => 'required|date',
             'tanggal_akhir' => 'required|date',
@@ -27,12 +26,10 @@ class LaporanTransaksiController extends Controller
             ->orderBy('tanggal_transaksi', 'asc')
             ->get();
 
-        // Hitung total diskon secara akurat
         $totalDiskon = $transaksi->sum(function ($trx) {
             return $trx->diskon ?? 0;
         });
 
-        // Data untuk view PDF
         $data = [
             'transaksi' => $transaksi,
             'tanggal_awal' => $tanggalAwal,
@@ -43,7 +40,6 @@ class LaporanTransaksiController extends Controller
             'total_diskon' => $totalDiskon,
         ];
 
-        // Generate PDF
         $pdf = PDF::loadView('laporan.listtransaksi', $data);
         $pdf->setPaper('a4', 'landscape');
 
@@ -52,7 +48,6 @@ class LaporanTransaksiController extends Controller
 
     public function generateProdukPDF(Request $request)
     {
-        // Validasi request
         $request->validate([
             'tanggal_awal' => 'required|date',
             'tanggal_akhir' => 'required|date',
@@ -61,7 +56,6 @@ class LaporanTransaksiController extends Controller
         $tanggalAwal = $request->tanggal_awal;
         $tanggalAkhir = $request->tanggal_akhir;
 
-        // Query produk terjual berdasarkan periode dengan pemisahan jenis satuan
         $produkTerjual = DB::table('detail_transaksi')
             ->join('transaksi', 'detail_transaksi.id_transaksi', '=', 'transaksi.id')
             ->join('produk', 'detail_transaksi.id_produk', '=', 'produk.id')
@@ -79,23 +73,18 @@ class LaporanTransaksiController extends Controller
             ->orderBy('produk.nama_produk')
             ->get();
 
-        // Set label satuan untuk setiap produk
         foreach ($produkTerjual as $item) {
-            // Ambil data produk untuk mendapatkan informasi lengkap
             $produk = Produk::find($item->id);
             
             if ($produk) {
-                // Set label satuan
                 $item->satuan_besar_label = $produk->satuan;
-                $item->satuan_kecil_label = $produk->jenis_isi ?: 'Pcs'; // Default ke 'Pcs' jika kosong
+                $item->satuan_kecil_label = $produk->jenis_isi ?: 'Pcs';
             } else {
-                // Default jika produk tidak ditemukan
                 $item->satuan_besar_label = 'Dus/Sak';
                 $item->satuan_kecil_label = 'Pcs/Kg';
             }
         }
 
-        // Hitung total untuk footer
         $totalSatuanBesar = $produkTerjual->sum('jumlah_satuan_besar');
         $totalSatuanKecil = $produkTerjual->sum('jumlah_satuan_kecil');
         $totalTransaksi = $produkTerjual->sum('total_transaksi');

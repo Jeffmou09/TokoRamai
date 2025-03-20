@@ -94,7 +94,7 @@
             <tr>
                 <th colspan="3" class="text-right">Total</th>
                 <th class="text-right">{{ $total_produk_terjual }}</th>
-                <th class="text-right">Rp {{ number_format($total_diskon, 0, ',', '.') }}</th>
+                <th class="text-right">Rp {{ number_format($total_diskon, 0, ',', '.') }}</th> 
                 <th class="text-right">Rp {{ number_format($total_penjualan, 0, ',', '.') }}</th>
             </tr>
         </tfoot>

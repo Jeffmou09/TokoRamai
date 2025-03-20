@@ -101,10 +101,8 @@ class ProdukController extends Controller
             'harga_jual_per_isi' => 'required|integer|min:1',
         ]);
 
-        // Ambil produk dari database
         $produk = Produk::findOrFail($id);
 
-        // Update data produk
         $produk->update([
             'nama_produk' => $request->nama_produk,
             'satuan' => $request->satuan,
