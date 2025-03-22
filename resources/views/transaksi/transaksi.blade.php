@@ -1,19 +1,19 @@
 @extends('layouts.sidebar')
 
 @section('content')
-<div class="container">
+<div class="container-fluid pt-4">
     <!-- Success Modal -->
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content border-0 rounded-lg" style="box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                 <div class="modal-header bg-success text-white">
                     <h5 class="modal-title" id="successModalLabel">Transaksi Berhasil!</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center">
+                <div class="modal-body text-center p-4">
                     <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
                     <h4 class="mt-3">Transaksi telah berhasil disimpan</h4>
-                    <p>Terima kasih atas pembelian Anda</p>
+                    <p class="text-muted">Terima kasih atas pembelian Anda</p>
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -26,7 +26,7 @@
     </div>
 
     @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show">
+    <div class="alert alert-danger alert-dismissible fade show rounded-lg border-0" style="box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
         {{ session('error') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -34,88 +34,100 @@
 
     <form id="transaksiForm" action="{{ route('transaksi.store') }}" method="POST">
         @csrf
-        <div class="row mb-3">
+        <div class="row mb-4">
             <!-- Card Tagihan -->
             <div class="col-md-8">
-                <div class="card p-3 shadow-sm h-100 d-flex justify-content-center">
+                <div class="card border-0 rounded-lg py-5 h-100 d-flex justify-content-center align-items-center" style="box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                     <h1 class="font-weight-bold m-0">Tagihan: Rp <span id="total_tagihan">0</span></h1>
                 </div>
             </div>
 
             <!-- Card Informasi Nota -->
             <div class="col-md-4">
-                <div class="card p-3 shadow-sm h-100">
-                    <label>Tanggal:</label>
-                    <input type="date" name="tanggal_transaksi" class="form-control" value="{{ date('Y-m-d') }}" readonly>
-
-                    <label>Customer:</label>
-                    <input type="hidden" name="customer_id" id="customer_id">
-                    <input type="text" id="nama_customer" class="form-control" list="customerList" placeholder="Cari customer...">
-                    <datalist id="customerList">
-                        @foreach($customerList as $customer)
-                            <option data-id="{{ $customer->id }}" value="{{ $customer->nama_customer }}"></option>
-                        @endforeach
-                    </datalist>
+                <div class="card border-0 rounded-lg py-3 px-4 h-100" style="box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div class="d-flex flex-column justify-content-center h-100">
+                        <div class="mb-2">
+                            <label class="form-label small mb-1">Tanggal:</label>
+                            <input type="date" name="tanggal_transaksi" class="form-control form-control-sm" value="{{ date('Y-m-d') }}" readonly>
+                        </div>
+                        <div>
+                            <label class="form-label small mb-1">Customer:</label>
+                            <input type="hidden" name="customer_id" id="customer_id">
+                            <input type="text" id="nama_customer" class="form-control form-control-sm" list="customerList" placeholder="Cari customer...">
+                            <datalist id="customerList">
+                                @foreach($customerList as $customer)
+                                    <option data-id="{{ $customer->id }}" value="{{ $customer->nama_customer }}"></option>
+                                @endforeach
+                            </datalist>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Form Input Produk -->
-        <div class="row mb-3">
-            <div class="col-md-3">
-                <label>Nama Produk</label>
-                <input type="hidden" name="produk_id" id="produk_id">
-                <input type="text" id="nama_produk" class="form-control" list="produkList" placeholder="Cari produk...">
-                <datalist id="produkList">
-                    @foreach($produkList as $produk)
-                        <option data-id="{{ $produk->id }}" value="{{ $produk->nama_produk }}"></option>
-                    @endforeach
-                </datalist>
-            </div>
+        <div class="card border-0 rounded-lg p-4 mb-4" style="box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label small">Nama Produk</label>
+                    <input type="hidden" name="produk_id" id="produk_id">
+                    <input type="text" id="nama_produk" class="form-control" list="produkList" placeholder="Cari produk...">
+                    <datalist id="produkList">
+                        @foreach($produkList as $produk)
+                            <option data-id="{{ $produk->id }}" value="{{ $produk->nama_produk }}"></option>
+                        @endforeach
+                    </datalist>
+                </div>
 
-            <div class="col-md-3">
-                <label>Harga Per Satuan</label>
-                <input type="text" class="form-control" id="harga_satuan" readonly>
-            </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label small">Harga Per Satuan</label>
+                    <input type="text" class="form-control" id="harga_satuan" readonly>
+                </div>
 
-            <div class="col-md-2">
-                <label>Jumlah</label>
-                <input type="number" class="form-control" id="jumlah" value="1" min="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-            </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label small">Jumlah</label>
+                    <input type="number" class="form-control" id="jumlah" value="1" min="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                </div>
 
-            <div class="col-md-2">
-                <label>Jenis Satuan</label>
-                <select class="form-control" id="jenis_satuan">
-                    <!-- Opsi akan diisi dengan JavaScript -->
-                </select>
-            </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label small">Jenis Satuan</label>
+                    <select class="form-control" id="jenis_satuan">
+                        <!-- Opsi akan diisi dengan JavaScript -->
+                    </select>
+                </div>
 
-            <div class="col-md-2">
-                <label>Harga Akhir</label>
-                <input type="text" class="form-control" id="harga_akhir" readonly>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label small">Harga Akhir</label>
+                    <input type="text" class="form-control" id="harga_akhir" readonly>
+                </div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary" id="simpan_item">
+                    <i class="fas fa-plus me-1"></i> Simpan Item
+                </button>
             </div>
         </div>
 
-        <button type="button" class="btn btn-primary" id="simpan_item">Simpan Item</button>
-
         <!-- Tabel Barang Dibeli -->
-        <div class="card mt-3 p-3">
-            <h5>Barang Dibeli</h5>
-            <table class="table table-bordered">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Nama Barang</th>
-                        <th>Harga Satuan</th>
-                        <th>Jumlah</th>
-                        <th>Jenis Satuan</th>
-                        <th>Harga Jual</th>
-                        <th class="text-center">Opsi</th>
-                    </tr>
-                </thead>
-                <tbody id="tabel_barang">
-                    <!-- Data akan diisi dengan JavaScript -->
-                </tbody>
-            </table>
+        <div class="card border-0 rounded-lg p-4 mb-4" style="box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <h5 class="mb-3">Barang Dibeli</h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Nama Barang</th>
+                            <th>Harga Satuan</th>
+                            <th>Jumlah</th>
+                            <th>Jenis Satuan</th>
+                            <th>Harga Jual</th>
+                            <th class="text-center">Opsi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel_barang">
+                        <!-- Data akan diisi dengan JavaScript -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Hidden input to store items data -->
@@ -125,29 +137,31 @@
 
         <!-- Card Subtotal, Diskon, dan Total Akhir -->
         <div class="d-flex justify-content-end">
-            <div class="card mt-3 p-3 ms-auto" style="max-width: 400px;">
-                <h5>Ringkasan Pembayaran</h5>
+            <div class="card border-0 rounded-lg p-4 ms-auto" style="max-width: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h5 class="mb-3">Ringkasan Pembayaran</h5>
                 
                 <!-- Subtotal -->
-                <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-3">
                     <label class="me-2 mb-0">Subtotal:</label>
                     <h4 class="mb-0">Rp <span id="subtotal">0</span></h4>
                 </div>
 
                 <!-- Diskon -->
-                <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-3">
                     <label class="me-2 mb-0">Diskon:</label>
-                    <input type="number" name="diskon" class="form-control w-100" id="diskon" placeholder="Masukkan diskon" value="0" min="0" oninput="validity.valid||(value='');">
+                    <input type="number" name="diskon" class="form-control w-50" id="diskon" placeholder="Masukkan diskon" value="0" min="0" oninput="validity.valid||(value='');">
                 </div>
 
                 <!-- Total Akhir -->
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <label class="me-2 mb-0">Total Akhir:</label>
                     <h4 class="mb-0">Rp <span id="total_akhir">0</span></h4>
                 </div>
 
                 <!-- Tombol Simpan & Batal -->
-                <button type="submit" class="btn btn-success btn-sm" id="simpan_transaksi">Simpan</button>
+                <button type="submit" class="btn btn-success w-100" id="simpan_transaksi">
+                    <i class="fas fa-save me-1"></i> Simpan Transaksi
+                </button>
             </div>
         </div>
     </form>
@@ -286,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td>${jenisSatuan}</td>
             <td>Rp ${parseFloat(hargaJual).toLocaleString()}</td>
             <td class="text-center">
-                <button type="button" class="btn btn-danger btn-sm delete-item" data-index="${items.length - 1}">
+                <button type="button" class="btn btn-sm btn-outline-danger delete-item" data-index="${items.length - 1}">
                     <i class="bi bi-trash"></i>
                 </button>
             </td>

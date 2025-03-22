@@ -69,19 +69,15 @@ class TransaksiController extends Controller
                     throw new \Exception('Stok produk tidak ditemukan untuk produk ID: ' . $item['produk_id']);
                 }
     
-                // Get product to check satuan and isi
                 $produk = Produk::find($item['produk_id']);
                 
-                // Update stock based on jenis satuan
                 if ($item['jenis_satuan'] == $produk->satuan) {
-                    // If main unit (e.g., dus/sak)
                     if ($stokProduk->stok_satuan_utama < $item['jumlah']) {
                         throw new \Exception('Stok tidak mencukupi untuk produk: ' . $produk->nama_produk);
                     }
                     
                     $stokProduk->stok_satuan_utama -= $item['jumlah'];
                     
-                    // Record in stok_opname
                     $stokOpname = new StokOpname();
                     $stokOpname->id = Str::uuid();
                     $stokOpname->id_stok = $stokProduk->id;
@@ -90,15 +86,11 @@ class TransaksiController extends Controller
                     $stokOpname->satuan = $item['jenis_satuan'];
                     $stokOpname->save();
                 } else if ($item['jenis_satuan'] == $produk->jenis_isi) {
-                    // If sub unit (e.g., pcs/kg)
                     $jumlahDibutuhkan = $item['jumlah'];
                     
-                    // Check if we have enough in sub units
                     if ($stokProduk->stok_satuan_isi >= $jumlahDibutuhkan) {
-                        // We have enough in smaller units, just deduct
                         $stokProduk->stok_satuan_isi -= $jumlahDibutuhkan;
                         
-                        // Record in stok_opname
                         $stokOpname = new StokOpname();
                         $stokOpname->id = Str::uuid();
                         $stokOpname->id_stok = $stokProduk->id;
@@ -107,14 +99,12 @@ class TransaksiController extends Controller
                         $stokOpname->satuan = $item['jenis_satuan'];
                         $stokOpname->save();
                     } else {
-                        // Not enough in smaller units, need to convert from larger units
                         $isiPerSatuan = $produk->isi_per_satuan;
                         
                         if ($isiPerSatuan <= 0) {
                             throw new \Exception('Nilai isi per satuan tidak valid untuk produk: ' . $produk->nama_produk);
                         }
                         
-                        // Calculate how many larger units we need to convert
                         $kurangDariSubUnit = $jumlahDibutuhkan - $stokProduk->stok_satuan_isi;
                         $unitBesarDibutuhkan = ceil($kurangDariSubUnit / $isiPerSatuan);
                         
@@ -123,10 +113,8 @@ class TransaksiController extends Controller
                                                 '. Dibutuhkan ' . $unitBesarDibutuhkan . ' ' . $produk->satuan . ' tambahan.');
                         }
                         
-                        // Convert larger units to smaller units
                         $stokProduk->stok_satuan_utama -= $unitBesarDibutuhkan;
                         
-                        // Record conversion of larger unit in stok_opname
                         $stokOpnameUtama = new StokOpname();
                         $stokOpnameUtama->id = Str::uuid();
                         $stokOpnameUtama->id_stok = $stokProduk->id;
@@ -135,10 +123,8 @@ class TransaksiController extends Controller
                         $stokOpnameUtama->satuan = $produk->satuan;
                         $stokOpnameUtama->save();
                         
-                        // Add the converted smaller units to stock temporarily
                         $subUnitDitambahkan = $unitBesarDibutuhkan * $isiPerSatuan;
                         
-                        // Record addition of smaller units from conversion
                         $stokOpnamePenambahan = new StokOpname();
                         $stokOpnamePenambahan->id = Str::uuid();
                         $stokOpnamePenambahan->id_stok = $stokProduk->id;
@@ -147,13 +133,10 @@ class TransaksiController extends Controller
                         $stokOpnamePenambahan->satuan = $produk->jenis_isi;
                         $stokOpnamePenambahan->save();
                         
-                        // Calculate final sub unit stock
                         $totalSubUnitSetelahKonversi = $stokProduk->stok_satuan_isi + $subUnitDitambahkan;
                         
-                        // Deduct what we need for this transaction
                         $stokProduk->stok_satuan_isi = $totalSubUnitSetelahKonversi - $jumlahDibutuhkan;
                         
-                        // Record final deduction for the sale
                         $stokOpnamePengurangan = new StokOpname();
                         $stokOpnamePengurangan->id = Str::uuid();
                         $stokOpnamePengurangan->id_stok = $stokProduk->id;
@@ -237,17 +220,14 @@ class TransaksiController extends Controller
 
     public function destroy($id)
     {
-        // Begin transaction
         DB::beginTransaction();
         try {
             $transaksi = Transaksi::with('detailTransaksi')->findOrFail($id);
             
-            // Hapus semua detail transaksi terlebih dahulu
             foreach ($transaksi->detailTransaksi as $detail) {
                 $detail->delete();
             }
             
-            // Setelah semua detail dihapus, hapus transaksi utama
             $transaksi->delete();
             
             DB::commit();

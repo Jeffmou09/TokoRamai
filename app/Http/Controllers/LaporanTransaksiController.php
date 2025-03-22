@@ -89,7 +89,6 @@ class LaporanTransaksiController extends Controller
         $totalSatuanKecil = $produkTerjual->sum('jumlah_satuan_kecil');
         $totalTransaksi = $produkTerjual->sum('total_transaksi');
 
-        // Data untuk view PDF
         $data = [
             'produkTerjual' => $produkTerjual,
             'tanggal_awal' => $tanggalAwal,
@@ -100,7 +99,6 @@ class LaporanTransaksiController extends Controller
             'total_transaksi' => $totalTransaksi,
         ];
 
-        // Generate PDF
         $pdf = PDF::loadView('laporan.produkterjual', $data);
         $pdf->setPaper('a4', 'landscape');
 

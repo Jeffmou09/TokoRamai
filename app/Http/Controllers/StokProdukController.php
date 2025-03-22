@@ -27,22 +27,16 @@ class StokProdukController extends Controller
             'harga_beli' => 'required|numeric|min:1',
         ]);
 
-        // Ambil produk terkait
         $produk = Produk::findOrFail($request->produk_id);
-
-        // Cari stok produk yang terkait dengan produk ini
         $stokProduk = StokProduk::where('id_produk', $request->produk_id)->first();
 
         if (!$stokProduk) {
-            // Jika stok belum ada, buat stok baru
             $stokProduk = StokProduk::create([
                 'produk_id' => $request->produk_id,
                 'stok_satuan_utama' => 0,
                 'stok_satuan_isi' => 0,
             ]);
         }
-
-        // Tambah atau kurangi stok
         if ($request->aksi_stok === 'tambah') {
             $stokProduk->stok_satuan_utama += $request->jumlah;
         } else {
@@ -61,15 +55,13 @@ class StokProdukController extends Controller
         ]);
 
         if ($request->aksi_stok === 'tambah') {
-            // Ambil stok lama sebelum perubahan
             $stokLama = $stokProduk->stok_satuan_utama - $request->jumlah;
             $hargaBeliLama = $produk->harga_beli_per_satuan;
             $totalStokBaru = $stokLama + $request->jumlah;
         
             $hargaBeliBaru = (($stokLama * $hargaBeliLama) + ($request->jumlah * $request->harga_beli)) / $totalStokBaru;
 
-            // Update harga beli pada tabel produk
-            $produk->harga_beli_per_satuan = round($hargaBeliBaru, 2); // Pastikan tidak ada pembulatan aneh
+            $produk->harga_beli_per_satuan = round($hargaBeliBaru, 2);
             $produk->harga_beli_per_isi = round($hargaBeliBaru / $produk->isi_per_satuan, 2);
             $produk->save();
         }
@@ -80,10 +72,7 @@ class StokProdukController extends Controller
 
     public function detail($id)
     {
-        // Get stock data with product relation
         $stok = StokProduk::with('produk')->findOrFail($id);
-        
-        // Get stock opname data related to this stock
         $stokOpname = StokOpname::where('id_stok', $id)
                             ->orderBy('created_at', 'desc')
                             ->get();
