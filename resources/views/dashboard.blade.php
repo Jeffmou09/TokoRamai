@@ -25,7 +25,7 @@
         <div class="card border-0 rounded-lg mb-3" style="box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
             <div class="card-body text-center py-4">
                 <h1 class="display-4 text-primary">Rp {{ number_format($todayIncome) }}</h1>
-                <p class="lead text-muted">Total Income</p>
+                <p class="lead text-muted">Total Income Hari Ini</p>
             </div>
         </div>
     </div>
@@ -35,7 +35,7 @@
     <div class="col-md-12">
         <div class="card border-0 rounded-lg" style="box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
             <div class="card-body py-4">
-                <h5 class="card-title text-dark mb-4">Income Per Hari</h5>
+                <h5 class="card-title text-dark mb-4">Income Per Hari Dalam Bulan Ini</h5>
                 <div style="position: relative; height: 300px;">
                     <canvas id="incomeChart"></canvas>
                 </div>

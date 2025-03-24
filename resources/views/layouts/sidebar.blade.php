@@ -12,6 +12,13 @@
             background-color: #53596B;
             border-radius: 5px;
         }
+        .user-greeting {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            padding: 8px;
+            background-color: #53596B;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -19,6 +26,7 @@
         <!-- Sidebar -->
         <div class="text-white p-3" style="width: 250px; min-height: 100vh; background-color: rgba(55, 62, 83, 1);">
             <h4 class="text-center">Toko Ramai</h4>
+            <p class="text-center"><i class="bi bi-person-circle me-1"></i> Hi, {{ Auth::user()->username }}</p>
             <hr>
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -71,6 +79,14 @@
                     <a href="{{ route('laporan') }}" class="nav-link text-white {{ request()->routeIs('laporan') ? 'active' : '' }}">
                         <i class="bi bi-file-earmark-text me-2"></i> Laporan
                     </a>
+                </li>
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="nav-link text-white w-100 text-start" style="background-color: transparent; border: none;" onclick="return confirm('Apakah Anda yakin untuk logout?');">
+                            <i class="bi bi-box-arrow-right me-2"></i> Logout
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>
