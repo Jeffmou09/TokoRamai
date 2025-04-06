@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="col-md-3 mb-3">
-                    <label class="form-label small">Harga Per Satuan</label>
+                    <label class="form-label small">Harga Satuan Besar</label>
                     <input type="text" class="form-control" id="harga_satuan" readonly>
                 </div>
 
@@ -116,7 +116,6 @@
                     <thead class="bg-light">
                         <tr>
                             <th>Nama Barang</th>
-                            <th>Harga Satuan</th>
                             <th>Jumlah</th>
                             <th>Jenis Satuan</th>
                             <th>Harga Jual</th>
@@ -295,7 +294,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         row.innerHTML = `
             <td>${namaProduk}</td>
-            <td>Rp ${parseFloat(hargaSatuan).toLocaleString()}</td>
             <td>${jumlah}</td>
             <td>${jenisSatuan}</td>
             <td>Rp ${parseFloat(hargaJual).toLocaleString()}</td>

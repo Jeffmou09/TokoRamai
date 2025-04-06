@@ -23,7 +23,7 @@
                         <input type="text" name="nama_produk" class="form-control" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Satuan</label>
+                        <label class="form-label">Satuan Besar</label>
                         <select name="satuan" class="form-control" required>
                             <option value="">-- Pilih Satuan --</option>
                             <option value="SAK">SAK</option>
@@ -34,11 +34,11 @@
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Isi per Satuan</label>
+                        <label class="form-label">Isi Satuan Kecil</label>
                         <input type="number" name="isi_per_satuan" class="form-control" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Jenis Isi</label>
+                        <label class="form-label">Satuan Kecil</label>
                         <select name="jenis_isi" class="form-control" required>
                             <option value="">-- Pilih Jenis Isi --</option>
                             <option value="PCS">PCS</option>
@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">Harga Beli per Satuan</label>
+                    <label class="form-label">Harga Beli Satuan Besar</label>
                     <div class="input-group">
                         <span class="input-group-text">Rp</span>
                         <input type="number" name="harga_beli_per_satuan" class="form-control" required>
@@ -57,7 +57,7 @@
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Harga Jual per Satuan</label>
+                        <label class="form-label">Harga Jual Satuan Besar</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
                             <input type="number" name="harga_jual_per_satuan" class="form-control" required>
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Harga Jual per Isi</label>
+                        <label class="form-label">Harga Jual Satuan Kecil</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
                             <input type="number" name="harga_jual_per_isi" class="form-control" required>
@@ -77,7 +77,7 @@
                     <div class="card-body">
                         <h5 class="card-title mb-3">Stok Awal</h5>
                         <div class="mb-3">
-                            <label class="form-label">Stok Satuan Utama</label>
+                            <label class="form-label">Stok Satuan Besar</label>
                             <input type="number" name="stok_satuan_utama" class="form-control" required>
                         </div>
                     </div>

@@ -66,10 +66,10 @@
                     <thead>
                         <tr class="bg-light">
                             <th>Nama Produk</th>
-                            <th>Stok Satuan</th>
-                            <th>Satuan (Sak / Dus)</th>
-                            <th>Isi</th>
-                            <th>Jenis Isi (Kg / Pcs)</th>
+                            <th>Stok Satuan Besar</th>
+                            <th>Satuan Besar</th>
+                            <th>Stok Satuan Kecil</th>
+                            <th>Satuan Kecil</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>

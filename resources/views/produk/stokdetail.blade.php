@@ -25,7 +25,7 @@
                                     <td class="border-0">: {{ $stok->produk->nama_produk }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="border-0">Satuan Utama</td>
+                                    <td class="border-0">Satuan Besar</td>
                                     <td class="border-0">: {{ $stok->produk->satuan }} ({{ $stok->stok_satuan_utama }})</td>
                                 </tr>
                             </table>
@@ -33,11 +33,11 @@
                         <div class="col-md-6">
                             <table class="table table-sm">
                                 <tr>
-                                    <td width="40%" class="border-0">Jenis Isi</td>
+                                    <td width="40%" class="border-0">Satuan Kecil</td>
                                     <td class="border-0">: {{ $stok->produk->jenis_isi }} ({{ $stok->stok_satuan_isi }})</td>
                                 </tr>
                                 <tr>
-                                    <td class="border-0">Isi Per Satuan</td>
+                                    <td class="border-0">Isi Satuan Kecil</td>
                                     <td class="border-0">: {{ $stok->produk->isi_per_satuan }} {{ $stok->produk->jenis_isi }}/{{ $stok->produk->satuan }}</td>
                                 </tr>
                             </table>

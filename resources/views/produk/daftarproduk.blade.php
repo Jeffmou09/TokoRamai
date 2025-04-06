@@ -21,13 +21,13 @@
                     <thead>
                         <tr class="bg-light">
                             <th>Nama Produk</th>
-                            <th>Satuan</th>
-                            <th>Isi per Satuan</th>
-                            <th>Jenis Isi</th>
-                            <th>Harga Beli per Satuan</th>
-                            <th>Harga Beli per Isi</th>
-                            <th>Harga Jual per Satuan</th>
-                            <th>Harga Jual per Isi</th>
+                            <th>Satuan Besar</th>
+                            <th>Isi Satuan Kecil</th>
+                            <th>Satuan Kecil</th>
+                            <th>Harga Beli Satuan Besar</th>
+                            <th>Harga Beli Satuan Kecil</th>
+                            <th>Harga Jual Satuan Besar</th>
+                            <th>Harga Jual Satuan Kecil</th>
                             <th class="text-center">Opsi</th>
                         </tr>
                     </thead>

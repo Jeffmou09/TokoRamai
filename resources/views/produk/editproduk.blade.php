@@ -24,7 +24,7 @@
                         <input type="text" name="nama_produk" class="form-control" value="{{ $produk->nama_produk }}" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Satuan</label>
+                        <label class="form-label">Satuan Besar</label>
                         <select name="satuan" class="form-control" required>
                             <option value="SAK" {{ $produk->satuan == 'SAK' ? 'selected' : '' }}>SAK</option>
                             <option value="DUS" {{ $produk->satuan == 'DUS' ? 'selected' : '' }}>DUS</option>
@@ -34,11 +34,11 @@
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Isi per Satuan</label>
+                        <label class="form-label">Isi Satuan Kecil</label>
                         <input type="number" name="isi_per_satuan" class="form-control" value="{{ $produk->isi_per_satuan }}" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Jenis Isi</label>
+                        <label class="form-label">Satuan Kecil</label>
                         <select name="jenis_isi" class="form-control" required>
                             <option value="PCS" {{ $produk->jenis_isi == 'PCS' ? 'selected' : '' }}>PCS</option>
                             <option value="KG" {{ $produk->jenis_isi == 'KG' ? 'selected' : '' }}>KG</option>
@@ -48,21 +48,21 @@
                 
                 <div class="row mb-4">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Harga Beli per Satuan</label>
+                        <label class="form-label">Harga Beli Satuan Besar</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
                             <input type="number" name="harga_beli_per_satuan" class="form-control" value="{{ $produk->harga_beli_per_satuan }}" required>
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Harga Jual per Satuan</label>
+                        <label class="form-label">Harga Jual Satuan Besar</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
                             <input type="number" name="harga_jual_per_satuan" class="form-control" value="{{ $produk->harga_jual_per_satuan }}" required>
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Harga Jual per Isi</label>
+                        <label class="form-label">Harga Jual Satuan Kecil</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
                             <input type="number" name="harga_jual_per_isi" class="form-control" value="{{ $produk->harga_jual_per_isi }}" required>
